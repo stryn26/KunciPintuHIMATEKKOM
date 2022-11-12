@@ -26,6 +26,7 @@
 #define BUTTON_PIN D3
 #define SS_PIN D4
 #define RST_PIN D8
+#define BUZZER D7
 
 String tmp_data = "";
 
@@ -52,11 +53,24 @@ void relay()
 
 void led()
 {
+  
 }
 
-void buzzer()
+void buzzer(String option)
 {
-  
+  if (option = "true"){
+    digitalWrite(BUZZER,HIGH);
+    delay(500);
+    digitalWrite(BUZZER,LOW);
+  }else {
+    digitalWrite(BUZZER,HIGH);
+    delay(500);
+    digitalWrite(BUZZER,LOW);
+    delay(500);
+    digitalWrite(BUZZER,HIGH);
+    delay(500);
+    digitalWrite(BUZZER,LOW);
+  }
 }
 
 void setup()
@@ -64,6 +78,8 @@ void setup()
   // put your setup code here, to run once:
   Serial.begin(115200);
   EEPROM.begin(4096);
+
+  pinMode(BUZZER,OUTPUT);
 
   lcd.begin();
   lcd.backlight();
