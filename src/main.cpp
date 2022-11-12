@@ -21,10 +21,13 @@
 #include <LiquidCrystal_I2C.h>
 #include <EEPROM.h>
 #include <MFRC522.h>
+#include <StreamUtils.h>
 
 #define BUTTON_PIN D3
 #define SS_PIN D4
 #define RST_PIN D8
+
+String tmp_data = "";
 
 LiquidCrystal_I2C lcd(PCF8574_ADDR_A21_A11_A01, 20, 4); //PCF8574_ADDR_A21_A11_A01 mereferensikan 0x27 Address (Platform IO)
 MFRC522 mfrc522(SS_PIN, RST_PIN);
@@ -32,12 +35,11 @@ MFRC522 mfrc522(SS_PIN, RST_PIN);
 void saveData(String Data){
 
 }
-void rfidRead()
-{
-}
+
 
 void rfidSign()
 {
+
 }
 
 void lcdSend(int msg)
@@ -54,6 +56,7 @@ void led()
 
 void buzzer()
 {
+  
 }
 
 void setup()
@@ -77,5 +80,36 @@ void setup()
 
 void loop()
 {
-  // put your main code here, to run repeatedly:
+  // Kode yang digunakan untuk membaca kartu apakah terbaca atau tidak , ketika tidak maka program akan melanjutkan ke awal loop 
+  // ini akan mempersingkat proses 
+  if ( ! mfrc522.PICC_IsNewCardPresent()) //ini akan memastikkan bahwa ada kartu yang terdeteksi ,
+  { 
+    return;
+  }
+
+  // Select one of the cards
+  if ( ! mfrc522.PICC_ReadCardSerial()) //pada proses ini data akan disimpan sementara
+  {
+    return;
+  }
+
+  Serial.println(F("**Card Detected:**"));
+  Serial.println();
+  //start block kode uid
+  Serial.print(" UID tag :");
+  
+  //kode yang digunakan untuk menampilkan UID kartu dari mfrc255
+  for (byte i = 0; i < mfrc522.uid.size; i++) 
+  {
+     Serial.print(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " ");
+     Serial.print(mfrc522.uid.uidByte[i], HEX);
+     tmp_data.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " ")); // ini akan membangun UID string utuh yang awalnya berbentuk array dari mfrc522
+     tmp_data.concat(String(mfrc522.uid.uidByte[i], HEX));
+  }
+
+  tmp_data.toUpperCase();//membuat data menjadi uppercase
+  
+  Serial.println();
+  //end block kode uid
+
 }
