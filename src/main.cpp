@@ -29,7 +29,7 @@
 LiquidCrystal_I2C lcd(PCF8574_ADDR_A21_A11_A01, 20, 4); //PCF8574_ADDR_A21_A11_A01 mereferensikan 0x27 Address (Platform IO)
 MFRC522 mfrc522(SS_PIN, RST_PIN);
 
-void saveData(){
+void saveData(String Data){
 
 }
 void rfidRead()
